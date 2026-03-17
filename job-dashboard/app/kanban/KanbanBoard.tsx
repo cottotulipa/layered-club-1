@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Job, Stage, STAGE_LABELS, STAGE_COLORS } from "@/lib/types";
 import JobModal from "@/components/JobModal";
-import { Plus, MapPin, DollarSign, Calendar, Flag } from "lucide-react";
+import { Plus, MapPin, DollarSign, Calendar, Flag, ArrowUpDown } from "lucide-react";
 
 const KANBAN_STAGES: Stage[] = [
   "wishlist", "applied", "document_screening",
@@ -16,6 +16,14 @@ const PRIORITY_COLOR = {
   low: "#6b7280",
 };
 
+type SortKey = "updatedAt" | "deadline" | "appliedDate";
+
+const SORT_OPTIONS: { key: SortKey; label: string }[] = [
+  { key: "updatedAt", label: "최신순" },
+  { key: "deadline", label: "마감일순" },
+  { key: "appliedDate", label: "지원일순" },
+];
+
 interface Props {
   initialJobs: Job[];
 }
@@ -25,6 +33,7 @@ export default function KanbanBoard({ initialJobs }: Props) {
   const [modal, setModal] = useState<{ open: boolean; job?: Partial<Job> }>({ open: false });
   const [dragging, setDragging] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState<Stage | null>(null);
+  const [sortBy, setSortBy] = useState<SortKey>("updatedAt");
 
   async function saveJob(data: Partial<Job>) {
     const method = data.id ? "PATCH" : "POST";
@@ -72,27 +81,63 @@ export default function KanbanBoard({ initialJobs }: Props) {
     setDragOver(null);
   }
 
-  const byStage = (stage: Stage) => jobs.filter((j) => j.stage === stage);
+  function sortJobs(list: Job[]): Job[] {
+    return [...list].sort((a, b) => {
+      if (sortBy === "updatedAt") {
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      }
+      if (sortBy === "deadline") {
+        const aDate = a.deadline || a.nextEventDate || "9999-12-31";
+        const bDate = b.deadline || b.nextEventDate || "9999-12-31";
+        return aDate.localeCompare(bDate);
+      }
+      // appliedDate
+      const aDate = a.appliedDate || a.createdAt;
+      const bDate = b.appliedDate || b.createdAt;
+      return bDate.localeCompare(aDate);
+    });
+  }
+
+  const byStage = (stage: Stage) => sortJobs(jobs.filter((j) => j.stage === stage));
 
   return (
-    <div className="p-8 h-full flex flex-col">
+    <div className="p-4 sm:p-8 h-full flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6 flex-shrink-0">
+      <div className="flex flex-wrap items-start sm:items-center justify-between gap-3 mb-6 flex-shrink-0">
         <div>
-          <h1 className="text-2xl font-black tracking-tight">칸반보드</h1>
+          <h1 className="text-2xl font-black tracking-tight">지원현황</h1>
           <p className="text-white/40 text-sm mt-1">전형 단계별 지원 현황</p>
         </div>
-        <button
-          onClick={() => setModal({ open: true, job: {} })}
-          className="flex items-center gap-2 bg-[#c8ff4d] text-[#0f0f0f] font-bold text-sm px-4 py-2 rounded-lg hover:bg-[#d4ff66] transition-colors"
-        >
-          <Plus size={15} />
-          지원 추가
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Sort controls */}
+          <div className="flex items-center gap-1 bg-white/[0.03] border border-white/[0.06] rounded-lg p-1">
+            <ArrowUpDown size={12} className="text-white/30 ml-1" />
+            {SORT_OPTIONS.map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setSortBy(key)}
+                className={`text-xs px-2.5 py-1 rounded-md font-medium transition-colors ${
+                  sortBy === key
+                    ? "bg-[#c8ff4d] text-[#0f0f0f]"
+                    : "text-white/40 hover:text-white/70"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => setModal({ open: true, job: {} })}
+            className="flex items-center gap-2 bg-[#c8ff4d] text-[#0f0f0f] font-bold text-sm px-4 py-2 rounded-lg hover:bg-[#d4ff66] transition-colors"
+          >
+            <Plus size={15} />
+            지원 추가
+          </button>
+        </div>
       </div>
 
       {/* Board */}
-      <div className="flex gap-3 overflow-x-auto scrollbar-thin pb-2 flex-1">
+      <div className="flex gap-3 overflow-x-auto scrollbar-thin pb-4 flex-1">
         {KANBAN_STAGES.map((stage) => {
           const stageJobs = byStage(stage);
           const color = STAGE_COLORS[stage];
@@ -101,7 +146,7 @@ export default function KanbanBoard({ initialJobs }: Props) {
           return (
             <div
               key={stage}
-              className="flex-shrink-0 w-60 flex flex-col"
+              className="flex-shrink-0 w-56 sm:w-60 flex flex-col"
               onDragOver={(e) => { e.preventDefault(); setDragOver(stage); }}
               onDragLeave={() => setDragOver(null)}
               onDrop={(e) => handleDrop(e, stage)}

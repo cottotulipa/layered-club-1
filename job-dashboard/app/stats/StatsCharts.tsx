@@ -91,14 +91,14 @@ export default function StatsCharts({ jobs }: Props) {
   };
 
   return (
-    <div className="p-8">
-      <div className="mb-8">
+    <div className="p-4 sm:p-8">
+      <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl font-black tracking-tight">합격률 통계</h1>
         <p className="text-white/40 text-sm mt-1">지원 현황 데이터 분석</p>
       </div>
 
       {/* Top KPIs */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
         {[
           { label: "총 지원", value: total, unit: "건" },
           { label: "최종 합격", value: offers, unit: "건", accent: true },
@@ -114,7 +114,7 @@ export default function StatsCharts({ jobs }: Props) {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
         {/* Stage distribution pie */}
         <div className="bg-[#1a1a1a] border border-white/[0.06] rounded-xl p-5">
           <h3 className="text-xs font-medium text-white/40 mb-4">전형 단계 분포</h3>
@@ -170,7 +170,7 @@ export default function StatsCharts({ jobs }: Props) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Funnel / pass rate bar */}
         <div className="bg-[#1a1a1a] border border-white/[0.06] rounded-xl p-5">
           <h3 className="text-xs font-medium text-white/40 mb-4">단계별 통과율</h3>

@@ -33,8 +33,8 @@ export default function InsightsView() {
   useEffect(() => { fetchInsights(); }, []);
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4 sm:p-8">
+      <div className="flex flex-wrap items-start sm:items-center justify-between gap-3 mb-6 sm:mb-8">
         <div>
           <h1 className="text-2xl font-black tracking-tight flex items-center gap-2">
             <Sparkles size={22} className="text-[#c8ff4d]" />

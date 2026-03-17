@@ -26,8 +26,8 @@ export default function CoverLettersView({ jobs }: Props) {
   }
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4 sm:p-8">
+      <div className="flex flex-wrap items-start sm:items-center justify-between gap-3 mb-6 sm:mb-8">
         <div>
           <h1 className="text-2xl font-black tracking-tight">지원서 관리</h1>
           <p className="text-white/40 text-sm mt-1">회사별 자기소개서 및 지원서 저장</p>
@@ -45,12 +45,12 @@ export default function CoverLettersView({ jobs }: Props) {
         <div className="flex flex-col items-center justify-center py-32 gap-3">
           <FileText size={40} className="text-white/10" />
           <p className="text-white/30 text-sm">저장된 지원서가 없어요.</p>
-          <p className="text-white/20 text-xs">칸반보드에서 자기소개서를 입력하면 여기에 표시돼요.</p>
+          <p className="text-white/20 text-xs">지원현황에서 자기소개서를 입력하면 여기에 표시돼요.</p>
         </div>
       ) : (
-        <div className="flex gap-5 h-[calc(100vh-200px)]">
+        <div className="flex flex-col md:flex-row gap-5 md:h-[calc(100vh-200px)]">
           {/* List */}
-          <div className="w-64 flex-shrink-0 space-y-2 overflow-y-auto scrollbar-thin">
+          <div className="w-full md:w-64 flex-shrink-0 space-y-2 overflow-y-auto scrollbar-thin max-h-60 md:max-h-none">
             {jobs.map((job) => (
               <button
                 key={job.id}

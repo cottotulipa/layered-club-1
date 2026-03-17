@@ -88,15 +88,15 @@ export default function CalendarView({ jobs }: Props) {
     .slice(0, 8);
 
   return (
-    <div className="p-8">
-      <div className="mb-8">
+    <div className="p-4 sm:p-8">
+      <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl font-black tracking-tight">일정 관리</h1>
         <p className="text-white/40 text-sm mt-1">마감일 및 면접 일정</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Calendar */}
-        <div className="col-span-2 bg-[#1a1a1a] border border-white/[0.06] rounded-xl p-6">
+        <div className="lg:col-span-2 bg-[#1a1a1a] border border-white/[0.06] rounded-xl p-4 sm:p-6">
           {/* Nav */}
           <div className="flex items-center justify-between mb-6">
             <button onClick={prevMonth} className="p-1.5 rounded-lg hover:bg-white/[0.06] text-white/40 hover:text-white/80 transition-colors">
@@ -136,7 +136,7 @@ export default function CalendarView({ jobs }: Props) {
               return (
                 <div
                   key={i}
-                  className={`min-h-[72px] rounded-lg p-1.5 border transition-colors ${
+                  className={`min-h-[52px] sm:min-h-[72px] rounded-lg p-1 sm:p-1.5 border transition-colors ${
                     isToday
                       ? "border-[#c8ff4d]/40 bg-[#c8ff4d]/[0.05]"
                       : "border-white/[0.04] hover:border-white/[0.1] hover:bg-white/[0.02]"

@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className="flex h-screen overflow-hidden bg-[#0f0f0f] text-[#f5f4f0]">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto scrollbar-thin">
+        <main className="flex-1 overflow-y-auto scrollbar-thin pt-14 md:pt-0">
           {children}
         </main>
       </body>
