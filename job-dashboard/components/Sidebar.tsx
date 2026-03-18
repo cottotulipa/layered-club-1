@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { UserButton, useUser, SignedIn } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import {
   LayoutDashboard,
   Columns,
@@ -64,7 +64,7 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
       </nav>
 
       {/* User info + sign out */}
-      <SignedIn>
+      {user && (
         <div className="px-4 py-4 border-t border-white/[0.06]">
           <div className="flex items-center gap-3">
             <UserButton
@@ -85,7 +85,7 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
             </div>
           </div>
         </div>
-      </SignedIn>
+      )}
     </>
   );
 }
